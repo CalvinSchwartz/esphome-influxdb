@@ -103,7 +103,7 @@ void InfluxDBWriter::write(std::string measurement,
   //this->request_->set_body(line.c_str());
   //this->request_->send({});
   //this->request_->close();
-  this->request_->post(this->service_url, line.c_str(), this->headers);
+  this->request_->post(this->service_url, line.c_str(), headers);
 
   ESP_LOGD(TAG, "InfluxDB packet: %s", line.c_str());
 }
