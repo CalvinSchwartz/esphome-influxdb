@@ -28,7 +28,7 @@ void InfluxDBWriter::setup() {
   }
 
   this->request_ = new http_request::HttpRequestComponent();
-  this->request_->setup();
+  //this->request_->setup();
 
   std::list<http_request::Header> headers;
   http_request::Header header;
@@ -40,14 +40,14 @@ void InfluxDBWriter::setup() {
     header.value = this->token.c_str();
     headers.push_back(header);
   }
-  this->request_->set_headers(headers);
-  this->request_->set_method("GET");
+  //this->request_->set_headers(headers);
+ // this->request_->set_method("GET");
   this->request_->set_useragent("ESPHome InfluxDB Bot");
   this->request_->set_timeout(this->send_timeout);
-  this->request_->set_url(this->service_url);
+  //this->request_->set_url(this->service_url);
 
   // From now own all request are POST.
-  this->request_->set_method("POST");
+  //this->request_->set_method("POST");
 
   if (publish_all) {
 #ifdef USE_BINARY_SENSOR
@@ -100,9 +100,10 @@ void InfluxDBWriter::write(std::string measurement,
   std::string line =
       measurement + tags + " " + field_key + "=" + (is_string ? ("\"" + value + "\"") : value);
 
-  this->request_->set_body(line.c_str());
-  this->request_->send({});
-  this->request_->close();
+  //this->request_->set_body(line.c_str());
+  //this->request_->send({});
+  //this->request_->close();
+  this->request_->post(this->service_url, line.c_str(), headers);
 
   ESP_LOGD(TAG, "InfluxDB packet: %s", line.c_str());
 }
