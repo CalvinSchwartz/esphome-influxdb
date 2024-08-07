@@ -30,16 +30,7 @@ void InfluxDBWriter::setup() {
   this->request_ = new http_request::HttpRequestComponent();
   //this->request_->setup();
 
-  std::list<http_request::Header> headers;
-  http_request::Header header;
-  header.name = "Content-Type";
-  header.value = "text/plain";
-  headers.push_back(header);
-  if ((this->orgid.length() > 0) && (this->token.length() > 0)) {
-    header.name = "Authorization";
-    header.value = this->token.c_str();
-    headers.push_back(header);
-  }
+
   //this->request_->set_headers(headers);
  // this->request_->set_method("GET");
   this->request_->set_useragent("ESPHome InfluxDB Bot");
@@ -103,6 +94,18 @@ void InfluxDBWriter::write(std::string measurement,
   //this->request_->set_body(line.c_str());
   //this->request_->send({});
   //this->request_->close();
+  std::list<http_request::Header> headers;
+  http_request::Header header;
+  header.name = "Content-Type";
+  header.value = "text/plain";
+  headers.push_back(header);
+  if ((this->orgid.length() > 0) && (this->token.length() > 0)) {
+    header.name = "Authorization";
+    header.value = this->token.c_str();
+    headers.push_back(header);
+  }
+
+
   this->request_->post(this->service_url, line.c_str(), headers);
 
   ESP_LOGD(TAG, "InfluxDB packet: %s", line.c_str());
