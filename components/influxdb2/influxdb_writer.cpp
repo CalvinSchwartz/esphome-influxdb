@@ -6,7 +6,7 @@
 #include <iomanip>
 #include <sstream>
 #include "esphome/components/http_request/http_request.h"
-#include "esphome/components/http_request/http_request_idf.h"
+//#include "esphome/components/http_request/http_request_idf.h" // ESP32 IDF
 #include "esphome/components/http_request/http_request_arduino.h"
 
 #ifdef USE_LOGGER
@@ -23,12 +23,12 @@ void InfluxDBWriter::setup() {
   for (auto fun : setup_callbacks)
     objs.push_back(fun());
 
-  //if(this->https) {
-  //  this->service_url = "https://" + this->host + "/api/v2/write?org=" + this->orgid + "&bucket=" + this->bucket + "&precision=ns";
-  //} else {
+  if(this->https) {
+    this->service_url = "https://" + this->host + "/api/v2/write?org=" + this->orgid + "&bucket=" + this->bucket + "&precision=ns";
+  } else {
   this->service_url = "http://" + this->host + ":" + to_string(this->port) +
                       "/api/v2/write?org=" + this->orgid + "&bucket=" + this->bucket + "&precision=ns";
-  //}
+  }
 
   this->request_ = new http_request::HttpRequestArduino();
   this->request_->setup();
