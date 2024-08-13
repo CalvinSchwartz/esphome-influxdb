@@ -5,8 +5,8 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
-#include "esphome/components/http_request.h"
-#include "esphome/components/http_request_idf.h"
+#include "esphome/components/http_request /http_request.h"
+#include "esphome/components/http_request /http_request_idf.h"
 
 #ifdef USE_LOGGER
 #include "esphome/components/logger/logger.h"
