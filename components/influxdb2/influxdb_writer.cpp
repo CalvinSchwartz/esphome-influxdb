@@ -31,7 +31,7 @@ void InfluxDBWriter::setup() {
   }
 
   this->request_ = new http_request::HttpRequestArduino();
-  this->request_->setup();
+  //this->request_->setup();
 
 
   //this->request_->set_headers(headers);
