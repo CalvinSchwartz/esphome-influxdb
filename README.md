@@ -61,3 +61,24 @@ influxdb2:
 * **measurement** (Optional, string): Name of measurements with update from this sensor. Defaults to the sanitized name of the sensor.
 * **tags** (Optional, mapping, default: {}): Additional tags added for this sensor.
 * **field_key** (Optional, string, default: value): Set field_key
+
+
+## Update notes for ESPHome 2024.06
+With ESPHome 2024.06 the http component was rewritten. Therefore this component had to be updated. In regards to this component the user has to do nothing. However, as the http component is utilized the corresponding configuration variables for ESP8266 have to be set, see: [HTTP Request](https://esphome.io/components/http_request.html#configuration-variables).
+
+This means setting
+```
+http_request:
+  verify_ssl: false
+```
+for ESP8266.
+
+## ESPHome older than 2024.06
+For ESPHome older than 2024.06 include the code as
+```
+external_components:
+  - source: github://CalvinSchwartz/esphome-influxdb@old
+    components: [ influxdb2 ]
+    refresh: 0s
+```
+Refresh is optional and triggers a new pull from Github.
