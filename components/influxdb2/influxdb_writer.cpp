@@ -33,7 +33,7 @@ void InfluxDBWriter::setup() {
   this->request_ = new http_request::HttpRequestArduino();
 
   this->request_->set_useragent("ESPHome InfluxDB Bot");
-  this->request_->set_timeout(1000);
+  this->request_->set_timeout(this->send_timeout);
 
   if (publish_all) {
 #ifdef USE_BINARY_SENSOR
