@@ -7,6 +7,7 @@
 #include <sstream>
 #include "esphome/components/http_request/http_request.h"
 #include "esphome/components/http_request/http_request_idf.h"
+#include "esphome/components/http_request/http_request_arduino.h"
 
 #ifdef USE_LOGGER
 #include "esphome/components/logger/logger.h"
@@ -29,7 +30,7 @@ void InfluxDBWriter::setup() {
                       "/api/v2/write?org=" + this->orgid + "&bucket=" + this->bucket + "&precision=ns";
   }
 
-  this->request_ = new http_request::HttpRequestComponent();
+  this->request_ = new http_request::HttpRequestArduino();
   this->request_->setup();
 
 
