@@ -27,7 +27,7 @@ void InfluxDBWriter::setup() {
                       "/api/v2/write?org=" + this->orgid + "&bucket=" + this->bucket + "&precision=ns";
   }
 
-  this->request_ = new http_request::HttpRequestIDF(this->service_url, "GET");
+  this->request_ = new http_request::HttpRequestArduino();
   this->request_->setup();
 
 
