@@ -37,7 +37,7 @@ void InfluxDBWriter::setup() {
   //this->request_->set_headers(headers);
  // this->request_->set_method("GET");
   this->request_->set_useragent("ESPHome InfluxDB Bot");
-  this->request_->set_timeout(this->send_timeout);
+  //this->request_->set_timeout(this->send_timeout);
   //this->request_->set_url(this->service_url);
 
   // From now own all request are POST.
