@@ -6,8 +6,12 @@
 #include <iomanip>
 #include <sstream>
 #include "esphome/components/http_request/http_request.h"
+#ifdef USE_HOST
+#include "esphome/components/http_request/http_request_host.h"
+#else
 //#include "esphome/components/http_request/http_request_idf.h" // ESP32 IDF
 #include "esphome/components/http_request/http_request_arduino.h"
+#endif
 
 #ifdef USE_LOGGER
 #include "esphome/components/logger/logger.h"
@@ -30,7 +34,11 @@ void InfluxDBWriter::setup() {
                       "/api/v2/write?org=" + this->orgid + "&bucket=" + this->bucket + "&precision=ns";
   }
 
+  #ifdef USE_HOST
+  this->request_ = new http_request::HttpRequestHost();
+  #else
   this->request_ = new http_request::HttpRequestArduino();
+  #endif
 
   this->request_->set_useragent("ESPHome InfluxDB Bot");
   this->request_->set_timeout(this->send_timeout);
@@ -111,7 +119,7 @@ void InfluxDBWriter::dump_config() {
 #ifdef USE_BINARY_SENSOR
 void InfluxDBWriter::on_sensor_update(binary_sensor::BinarySensor *obj,
                                       std::string measurement, std::string tags, std::string field_key, bool state) {
-  write(measurement, tags, field_key0 state ? "t" : "f", false);
+  write(measurement, tags, field_key, state ? "t" : "f", false);
 }
 #endif
 

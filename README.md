@@ -49,7 +49,7 @@ influxdb2:
 * **token** (Required, string): Token used when connecting to influxdb. Format: "Token XXXX"
 * **bucket** (Required, string): Name of influxdb bucket.
 * **https** (Optional, bool, default: false): Uses https and ignores the port setting.
-* **precision** (Optional, int, default: 6): Number of decimal places.
+* **precision** (Optional, int, default: 8): Number of decimal places.
 * **send_timeout** (Optional, time, default: "500ms"): Time to wait before sending UDP packets which have not been filled to max size.
 * **publish_all** (Optional, boolean, default: True): If true, publish updates from all sensors unless explicitly ignored in per sensor configuration. If false, only publish updates from sensors explicitly configured.
 * **tags** (Optional, mapping, default 'node: <esphome.name>'): Mapping of tag keys and values. 

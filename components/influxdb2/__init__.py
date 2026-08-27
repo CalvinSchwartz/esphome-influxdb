@@ -85,7 +85,7 @@ def to_code(config):
                 measurement = f"{sensor_id}->get_object_id()"
 
             cg.add(var.add_setup_callback(cg.RawExpression(
-                f"[]() -> EntityBase* {{ {sensor_id}->add_on_state_callback([](float state) {{ {config[CONF_ID]}->on_sensor_update({sensor_id}, {measurement}, \"{tags}\", \"{field_key}\", state); }}); return {sensor_id}; }}")))
+                f"[]() -> EntityBase* {{ {sensor_id}->add_on_state_callback([](auto state) {{ {config[CONF_ID]}->on_sensor_update({sensor_id}, {measurement}, \"{tags}\", \"{field_key}\", state); }}); return {sensor_id}; }}")))
         else:
             cg.add(var.add_setup_callback(cg.RawExpression(
                 f"[]() -> EntityBase* {{ return {sensor_id}; }}")))
