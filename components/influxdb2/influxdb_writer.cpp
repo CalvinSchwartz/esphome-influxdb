@@ -21,6 +21,36 @@ namespace esphome {
 namespace influxdb {
 static const char *TAG = "influxdb_jab";
 
+static std::string escape_line_protocol_identifier(std::string value) {
+  std::string escaped;
+  escaped.reserve(value.size() * 2);
+  for (char c : value) {
+    if (c == '\\' || c == ' ' || c == ',' || c == '=') {
+      escaped.push_back('\\');
+    }
+    escaped.push_back(c);
+  }
+  return escaped;
+}
+
+static std::string escape_line_protocol_string(std::string value) {
+  std::string escaped;
+  escaped.reserve(value.size() * 2);
+  for (char c : value) {
+    if (c == '\\' || c == '"') {
+      escaped.push_back('\\');
+      escaped.push_back(c);
+    } else if (c == '\n') {
+      escaped += "\\n";
+    } else if (c == '\r') {
+      escaped += "\\r";
+    } else {
+      escaped.push_back(c);
+    }
+  }
+  return escaped;
+}
+
 void InfluxDBWriter::setup() {
   ESP_LOGCONFIG(TAG, "Setting up InfluxDB Writer...");
   std::vector<EntityBase *> objs;
@@ -84,17 +114,11 @@ void InfluxDBWriter::write(std::string measurement,
                            const std::string field_key,
                            const std::string value,
                            const bool is_string) {
-  std::replace(measurement.begin(), measurement.end(), '-', '_');
-  for (size_t i = 0; i < tags.length(); ++i){ // Add the escape char "\" to all whitespaces in the tags with an "\ "
-    if (tags[i] == ' ') {
-      tags.insert(i, "\\");
-      i++; // Skip the inserted backslash
-    }
-  }
-  std::string line =
-      measurement + tags + " " + field_key + "=" + (is_string ? ("\"" + value + "\"") : value);
+  std::string line = escape_line_protocol_identifier(measurement) + tags + " " +
+                     escape_line_protocol_identifier(field_key) + "=" +
+                     (is_string ? ("\"" + escape_line_protocol_string(value) + "\"") : value);
 
-  std::list<http_request::Header> headers;
+  std::vector<http_request::Header> headers;
   http_request::Header header;
   header.name = "Content-Type";
   header.value = "text/plain";

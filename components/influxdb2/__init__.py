@@ -27,6 +27,31 @@ CONF_PRECISION = 'precision'
 CONF_FIELD_KEY = 'field_key'
 
 
+def _escape_line_protocol(value):
+    return (
+        value.replace('\\', '\\\\')
+        .replace(',', '\\,')
+        .replace(' ', '\\ ')
+        .replace('=', '\\=')
+    )
+
+
+def _escape_line_protocol_string(value):
+    return (
+        value.replace('\\', '\\\\')
+        .replace('"', '\\"')
+        .replace('\n', '\\n')
+        .replace('\r', '\\r')
+    )
+
+
+def _format_tags(tag_map):
+    return ''.join(
+        ',{}={}'.format(_escape_line_protocol(tag), _escape_line_protocol(value))
+        for tag, value in tag_map.items()
+    )
+
+
 SENSOR_SCHEMA = cv.Schema({
     cv.validate_id_name:
     cv.Schema({
@@ -68,6 +93,7 @@ def to_code(config):
     cg.add(var.set_orgid(config[CONF_ORG_ID]))
     cg.add(var.set_token(config[CONF_TOKEN]))
     cg.add(var.set_bucket(config[CONF_BUCKET]))
+    cg.add(var.set_tags(_format_tags(config[CONF_TAGS])))
     cg.add(var.set_send_timeout(config[CONF_SEND_TIMEOUT]))
     cg.add(var.set_publish_all(config[CONF_PUBLISH_ALL]))
     cg.add(var.set_https(config[CONF_HTTPS]))
@@ -76,11 +102,11 @@ def to_code(config):
 
     for sensor_id, sensor_config in config[CONF_SENSORS].items():
         if sensor_config[CONF_IGNORE] == False:
-            tags = ''.join(',{}={}'.format(tag, value) for tag, value in {
-                           **config[CONF_TAGS], **sensor_config[CONF_TAGS]}.items())
+            tags = _format_tags({**config[CONF_TAGS], **sensor_config[CONF_TAGS]})
             field_key = sensor_config[CONF_FIELD_KEY]
             if 'measurement' in sensor_config:
-                measurement = f"\"{sensor_config[CONF_MEASUREMENT]}\""
+                measurement = _escape_line_protocol_string(sensor_config[CONF_MEASUREMENT])
+                measurement = f'"{measurement}"'
             else:
                 measurement = f"{sensor_id}->get_object_id()"
 
