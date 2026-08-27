@@ -50,7 +50,7 @@ influxdb2:
 * **bucket** (Required, string): Name of influxdb bucket.
 * **https** (Optional, bool, default: false): Uses https and ignores the port setting.
 * **precision** (Optional, int, default: 8): Number of decimal places.
-* **send_timeout** (Optional, time, default: "500ms"): Time to wait before sending UDP packets which have not been filled to max size.
+* **send_timeout** (Optional, time, default: "500ms"): Time to wait before sending HTTP requests that have not been filled to max size.
 * **publish_all** (Optional, boolean, default: True): If true, publish updates from all sensors unless explicitly ignored in per sensor configuration. If false, only publish updates from sensors explicitly configured.
 * **tags** (Optional, mapping, default 'node: <esphome.name>'): Mapping of tag keys and values. 
 * **sensors** (Optional, mapping, default: {}): Per sensor configuration. Keys are sensor IDs. All types of sensors are included in this mapping, there is no distinction between float, binary and text sensors.
@@ -65,6 +65,8 @@ influxdb2:
 
 ## Update notes for ESPHome 2024.06
 With ESPHome 2024.06 the http component was rewritten. Therefore this component had to be updated. In regards to this component the user has to do nothing. However, as the http component is utilized the corresponding configuration variables for ESP8266 have to be set, see: [HTTP Request](https://esphome.io/components/http_request.html#configuration-variables).
+
+Validated against ESPHome 2026.8.1.
 
 This means setting
 ```

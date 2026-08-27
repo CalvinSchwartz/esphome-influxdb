@@ -1,7 +1,6 @@
 #include "influxdb_writer.h"
 #include "esphome/core/application.h"
 #include "esphome/core/log.h"
-#include <algorithm>
 #include <string>
 #include <iomanip>
 #include <sstream>
@@ -21,6 +20,7 @@ namespace esphome {
 namespace influxdb {
 static const char *TAG = "influxdb_jab";
 
+// Keep these helpers aligned with InfluxDB line protocol escaping rules.
 static std::string escape_line_protocol_identifier(std::string value) {
   std::string escaped;
   escaped.reserve(value.size() * 2);
